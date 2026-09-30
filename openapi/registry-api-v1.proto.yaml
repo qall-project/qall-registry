@@ -1,0 +1,343 @@
+# Generated with protoc-gen-openapi
+# https://github.com/kollalabs/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Api API
+    version: 0.0.1
+paths:
+    /v1:
+        get:
+            tags:
+                - Api
+            summary: GetServiceInfo
+            description: General methods
+            operationId: Api_GetServiceInfo
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegistryInfo'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/blocks:
+        get:
+            tags:
+                - Api
+            summary: Get
+            description: Retrieve a block by hash. Used by the execution service to fetch tasks.
+            operationId: Api_Get
+            parameters:
+                - name: hashes
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - Api
+            summary: Push
+            description: |-
+                Upload a batch of blocks. Only missing blocks should be sent
+                 (use Check first). Uploading an existing block is a no-op (idempotent).
+            operationId: Api_Push
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PushResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/blocks/check:
+        post:
+            tags:
+                - Api
+            summary: Check
+            description: |-
+                Check which hashes are already known by the registry.
+                 Client sends a list of hashes it wants to push.
+                 Registry returns the subset that are missing (need upload).
+                 This is the core delta-push mechanism: only upload what's new.
+            operationId: Api_Check
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CheckRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CheckResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/tags:
+        post:
+            tags:
+                - Api
+            summary: Tag
+            description: |-
+                Register or update a named workflow tag pointing to a root node hash.
+                 Equivalent to `docker tag`.
+            operationId: Api_Tag
+            parameters:
+                - name: tag.name
+                  in: query
+                  schema:
+                    type: string
+                - name: tag.version
+                  in: query
+                  schema:
+                    type: string
+                - name: tag.rootHash
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TagResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/tags/{name}:
+        get:
+            tags:
+                - Api
+            summary: ListTags
+            description: List all versions of a workflow.
+            operationId: Api_ListTags
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListTagsResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/tags/{name}/{version}:
+        get:
+            tags:
+                - Api
+            summary: Resolve
+            description: Resolve a workflow name+version to its root node hash.
+            operationId: Api_Resolve
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: version
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ResolveResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - Api
+            summary: Untag
+            description: Delete a workflow tag (does not GC blocks, blocks are ref-counted).
+            operationId: Api_Untag
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: version
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UntagResponse'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        Block:
+            type: object
+            properties:
+                hash:
+                    type: string
+                data:
+                    type: string
+                    format: byte
+            description: 'A Block is the universal storage unit in the registry. Everything (payload, node, constraints) is a Block. The registry is content-addressed: the hash IS the identity. The registry doesn''t care what the data means, it just stores bytes.'
+        CheckRequest:
+            type: object
+            properties:
+                hashes:
+                    type: array
+                    items:
+                        type: string
+        CheckResponse:
+            type: object
+            properties:
+                missingHashes:
+                    type: array
+                    items:
+                        type: string
+                    description: Hashes from the request that the registry does NOT have yet.
+                totalCount:
+                    type: integer
+                    format: int32
+        GetResponse:
+            type: object
+            properties:
+                blocks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Block'
+                totalCount:
+                    type: integer
+                    format: int32
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ListTagsResponse:
+            type: object
+            properties:
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Tag'
+                totalCount:
+                    type: integer
+                    format: int32
+        PushResponse:
+            type: object
+            properties:
+                writtenBlocksCount:
+                    type: integer
+                    description: Number of blocks actually written (already-present blocks skipped).
+                    format: int32
+        RegistryInfo:
+            type: object
+            properties:
+                name:
+                    type: string
+                version:
+                    type: string
+        ResolveResponse:
+            type: object
+            properties:
+                rootHash:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        Tag:
+            type: object
+            properties:
+                name:
+                    type: string
+                version:
+                    type: string
+                rootHash:
+                    type: string
+            description: A Tag is the only named, versioned object in the registry. It is a pointer to a root node hash, nothing more.
+        TagResponse:
+            type: object
+            properties:
+                uri:
+                    type: string
+                    description: 'The canonical workflow URI: "<name>:<version>"'
+        UntagResponse:
+            type: object
+            properties:
+                deleted:
+                    type: boolean
+tags:
+    - name: Api

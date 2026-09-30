@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package registry_api_v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "google/api/annotations.proto";
+
+option go_package = "internal/server/protobuf/registry_api_v1";
+
+
+// A Block is the universal storage unit in the registry.
+// Everything (payload, node, constraints) is a Block.
+// The registry is content-addressed: the hash IS the identity.
+// The registry doesn't care what the data means, it just stores bytes.
+message Block {
+  string hash    = 1;  // Content Identifier (CID)
+  bytes  data    = 2;  // canonical JSON-encoded object
+}
+
+// A Tag is the only named, versioned object in the registry.
+// It is a pointer to a root node hash, nothing more.
+message Tag {
+  string name      = 1;  // e.g. "my_vqe"
+  string version   = 2;  // e.g. "v1" or "latest"
+  string root_hash = 3;  // hash of the root block
+}
+
+message RegistryInfo {
+  string name = 1;
+  string version = 2;
+}
+
+service Api {
+  /*
+   * General methods
+   */
+  rpc GetServiceInfo(google.protobuf.Empty) returns (RegistryInfo) {
+    option (google.api.http) = {get: "/v1"};
+  }
+
+  // Check which hashes are already known by the registry.
+  // Client sends a list of hashes it wants to push.
+  // Registry returns the subset that are missing (need upload).
+  // This is the core delta-push mechanism: only upload what's new.
+  rpc Check(CheckRequest) returns (CheckResponse) {
+    option (google.api.http) = {
+      post: "/v1/blocks/check"
+      body: "*"
+    };
+  }
+
+  // Upload a batch of blocks. Only missing blocks should be sent
+  // (use Check first). Uploading an existing block is a no-op (idempotent).
+  rpc Push(PushRequest) returns (PushResponse) {
+    option (google.api.http) = {post: "/v1/blocks"};
+  }
+
+  // Retrieve a block by hash. Used by the execution service to fetch tasks.
+  rpc Get(GetRequest) returns (GetResponse) {
+    option (google.api.http) = {get: "/v1/blocks"};
+  }
+
+  // Register or update a named workflow tag pointing to a root node hash.
+  // Equivalent to `docker tag`.
+  rpc Tag(TagRequest) returns (TagResponse) {
+    option (google.api.http) = {post: "/v1/tags"};
+  }
+
+  // Resolve a workflow name+version to its root node hash.
+  rpc Resolve(ResolveRequest) returns (ResolveResponse) {
+    option (google.api.http) = {get: "/v1/tags/{name}/{version}"};
+  }
+
+  // List all versions of a workflow.
+  rpc ListTags(ListTagsRequest) returns (ListTagsResponse) {
+    option (google.api.http) = {get: "/v1/tags/{name}"};
+  }
+
+  // Delete a workflow tag (does not GC blocks, blocks are ref-counted).
+  rpc Untag(UntagRequest) returns (UntagResponse) {
+    option (google.api.http) = {delete: "/v1/tags/{name}/{version}"};
+  }
+}
+
+message CheckRequest {
+  repeated string hashes = 1;
+}
+
+message CheckResponse {
+  // Hashes from the request that the registry does NOT have yet.
+  repeated string missing_hashes = 1;
+  int32 total_count = 2;
+}
+
+message PushRequest {
+  repeated Block blocks = 1;
+}
+
+message PushResponse {
+  // Number of blocks actually written (already-present blocks skipped).
+  int32 written_blocks_count = 1;
+}
+
+message GetRequest {
+  repeated string hashes = 1;
+}
+
+message GetResponse {
+  repeated Block blocks = 1;
+  int32 total_count = 2;
+}
+
+message TagRequest {
+  Tag tag = 1;
+}
+
+message TagResponse {
+  // The canonical workflow URI: "<name>:<version>"
+  string uri = 1;
+}
+
+message ResolveRequest {
+  string name    = 1;
+  string version = 2;
+}
+
+message ResolveResponse {
+  string root_hash = 1;
+}
+
+message ListTagsRequest {
+  string name = 1;
+}
+
+message ListTagsResponse {
+  repeated Tag tags = 1;
+  int32 total_count = 2;
+}
+
+message UntagRequest {
+  string name    = 1;
+  string version = 2;
+}
+
+message UntagResponse {
+  bool deleted = 1;
+}
