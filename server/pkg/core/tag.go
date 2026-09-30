@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"qall-registry-server/pkg/objects"
 	"strings"
+
+	"github.com/qall-project/qall-registry/pkg/objects"
 )
 
 func (c *RegistryCore) ListTags(ctx context.Context, name string) ([]objects.Tag, error) {

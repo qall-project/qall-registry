@@ -22,11 +22,11 @@ RUN apk add --no-cache ca-certificates
 
 RUN adduser -D -g '' qall
 
-COPY --from=builder /app/qall-registry-server /usr/local/bin/qall-registry-server
+COPY --from=builder /app/github.com/qall-project/qall-registry/server /usr/local/bin/github.com/qall-project/qall-registry/server
 
 RUN mkdir -p /.data && chown -R qall:qall /.data
 
 WORKDIR /.data
 USER qall
 
-ENTRYPOINT ["/usr/local/bin/qall-registry-server"]
+ENTRYPOINT ["/usr/local/bin/github.com/qall-project/qall-registry/server"]

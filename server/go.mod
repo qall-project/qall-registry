@@ -1,4 +1,4 @@
-module qall-registry-server
+module github.com/qall-project/qall-registry
 
 go 1.26.3
 

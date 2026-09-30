@@ -12,10 +12,10 @@ import (
 	"sync"
 	"testing"
 
-	bs "qall-registry-server/pkg/blockstores/local"
-	"qall-registry-server/pkg/core"
-	ds "qall-registry-server/pkg/datastores/local"
-	"qall-registry-server/pkg/objects"
+	bs "github.com/qall-project/qall-registry/pkg/blockstores/local"
+	"github.com/qall-project/qall-registry/pkg/core"
+	ds "github.com/qall-project/qall-registry/pkg/datastores/local"
+	"github.com/qall-project/qall-registry/pkg/objects"
 
 	"github.com/ipfs/go-cid"
 	"github.com/ipld/go-ipld-prime/codec/dagcbor"

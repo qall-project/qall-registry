@@ -2,7 +2,8 @@ package datastores
 
 import (
 	"context"
-	"qall-registry-server/pkg/objects"
+
+	"github.com/qall-project/qall-registry/pkg/objects"
 )
 
 type DataStore interface {

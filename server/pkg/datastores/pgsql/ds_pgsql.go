@@ -3,7 +3,8 @@ package pgsql
 import (
 	"context"
 	"errors"
-	"qall-registry-server/pkg/objects"
+
+	"github.com/qall-project/qall-registry/pkg/objects"
 )
 
 type PostgresDataStore struct{}

@@ -5,12 +5,13 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"qall-registry-server/pkg/blockstores"
-	"qall-registry-server/pkg/datastores"
-	"qall-registry-server/pkg/objects"
 	"runtime"
 	"sync"
 	"sync/atomic"
+
+	"github.com/qall-project/qall-registry/pkg/blockstores"
+	"github.com/qall-project/qall-registry/pkg/datastores"
+	"github.com/qall-project/qall-registry/pkg/objects"
 
 	cid "github.com/ipfs/go-cid"
 	"github.com/ipld/go-ipld-prime/codec/dagcbor"

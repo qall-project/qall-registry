@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
-	"qall-registry-server/pkg/objects"
 	"time"
+
+	"github.com/qall-project/qall-registry/pkg/objects"
 
 	"go.etcd.io/bbolt"
 )
