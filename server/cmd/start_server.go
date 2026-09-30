@@ -12,12 +12,12 @@ import (
 	"google.golang.org/grpc"
 
 	"qall-registry-server/internal/server"
-	pb "qall-registry-server/internal/server/protobuf/registry_api_v1"
 	"qall-registry-server/pkg/blockstores"
 	bslocal "qall-registry-server/pkg/blockstores/local"
 	bs3 "qall-registry-server/pkg/blockstores/object"
 	"qall-registry-server/pkg/core"
 	ds "qall-registry-server/pkg/datastores/local"
+	pb "qall-registry-server/pkg/server/protobuf/registry_api_v1"
 
 	srv "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 

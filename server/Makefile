@@ -4,7 +4,7 @@ MAKEFLAGS += --no-print-directory
 build:
 	go build -ldflags="-s -w" -o qall-registry-server ./cmd/start_server.go
 
-# local.env values are injected here. 
+# local.env values are injected here.
 -include ../infrastructure/local/vars/local.env
 
 # The environment variable bellow are defaulted to the local MinIO value from local.env
