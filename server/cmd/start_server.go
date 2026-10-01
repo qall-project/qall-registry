@@ -11,13 +11,13 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/qall-project/qall-registry/internal/server"
-	"github.com/qall-project/qall-registry/pkg/blockstores"
-	bslocal "github.com/qall-project/qall-registry/pkg/blockstores/local"
-	bs3 "github.com/qall-project/qall-registry/pkg/blockstores/object"
-	"github.com/qall-project/qall-registry/pkg/core"
-	ds "github.com/qall-project/qall-registry/pkg/datastores/local"
-	pb "github.com/qall-project/qall-registry/pkg/server/protobuf/registry_api_v1"
+	"github.com/qall-project/qall-registry/server/internal/server"
+	"github.com/qall-project/qall-registry/server/pkg/blockstores"
+	bslocal "github.com/qall-project/qall-registry/server/pkg/blockstores/local"
+	bs3 "github.com/qall-project/qall-registry/server/pkg/blockstores/object"
+	"github.com/qall-project/qall-registry/server/pkg/core"
+	ds "github.com/qall-project/qall-registry/server/pkg/datastores/local"
+	pb "github.com/qall-project/qall-registry/server/pkg/server/protobuf/registry_api_v1"
 
 	srv "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 

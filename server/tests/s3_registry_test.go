@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	bs3 "github.com/qall-project/qall-registry/pkg/blockstores/object"
-	"github.com/qall-project/qall-registry/pkg/core"
-	ds "github.com/qall-project/qall-registry/pkg/datastores/local"
-	"github.com/qall-project/qall-registry/pkg/objects"
+	bs3 "github.com/qall-project/qall-registry/server/pkg/blockstores/object"
+	"github.com/qall-project/qall-registry/server/pkg/core"
+	ds "github.com/qall-project/qall-registry/server/pkg/datastores/local"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 )
 
 func s3ConfigFromEnv(t *testing.T) (bs3.S3Config, bool) {

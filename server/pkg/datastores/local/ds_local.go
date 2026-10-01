@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/qall-project/qall-registry/pkg/objects"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 
 	"go.etcd.io/bbolt"
 )

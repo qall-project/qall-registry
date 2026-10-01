@@ -3,7 +3,7 @@ package datastores
 import (
 	"context"
 
-	"github.com/qall-project/qall-registry/pkg/objects"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 )
 
 type DataStore interface {

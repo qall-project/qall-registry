@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/qall-project/qall-registry/pkg/objects"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 )
 
 type PostgresDataStore struct{}

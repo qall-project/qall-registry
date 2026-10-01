@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 
-	pb "github.com/qall-project/qall-registry/internal/server/protobuf/registry_api_v1"
-	"github.com/qall-project/qall-registry/pkg/core"
-	"github.com/qall-project/qall-registry/pkg/objects"
+	pb "github.com/qall-project/qall-registry/server/internal/server/protobuf/registry_api_v1"
+	"github.com/qall-project/qall-registry/server/pkg/core"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 )
 
 type ApiV1Server struct {

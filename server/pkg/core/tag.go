@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/qall-project/qall-registry/pkg/objects"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 )
 
 func (c *RegistryCore) ListTags(ctx context.Context, name string) ([]objects.Tag, error) {

@@ -9,9 +9,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/qall-project/qall-registry/pkg/blockstores"
-	"github.com/qall-project/qall-registry/pkg/datastores"
-	"github.com/qall-project/qall-registry/pkg/objects"
+	"github.com/qall-project/qall-registry/server/pkg/blockstores"
+	"github.com/qall-project/qall-registry/server/pkg/datastores"
+	"github.com/qall-project/qall-registry/server/pkg/objects"
 
 	cid "github.com/ipfs/go-cid"
 	"github.com/ipld/go-ipld-prime/codec/dagcbor"
