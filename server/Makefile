@@ -2,7 +2,7 @@
 MAKEFLAGS += --no-print-directory
 
 build:
-	go build -ldflags="-s -w" -o github.com/qall-project/qall-registry ./cmd/start_server.go
+	go build -ldflags="-s -w" -o github.com/qall-project/qall-registry/server ./cmd/start_server.go
 
 # local.env values are injected here.
 -include ../infrastructure/local/vars/local.env
