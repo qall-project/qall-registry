@@ -6,8 +6,10 @@ jobs:
   publish:
     permissions:
       contents: write
-
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
 
     steps:
     - uses: actions/checkout@v4
@@ -21,14 +23,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd client/
         python -m pip install --upgrade pip
         pip install build twine setuptools-scm
 
     - name: Get version
       id: version
       run: |
-        cd client/
         version=$(sed -n 's/^ *version.*=.*"\([^"]*\)".*/\1/p' pyproject.toml)
         echo "version=$version" >> $GITHUB_ENV
         echo "Version : $version"
